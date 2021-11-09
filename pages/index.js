@@ -37,8 +37,9 @@ export default function Home(props) {
 
 
 export async function getStaticProps(context) {
-  const res = await fetch(`http://local.nextjs.com/api/v1/re/products`)
-  const sliderRes = await fetch(`http://local.nextjs.com/api/v1/re/sliders`)
+  const res = await fetch(`https://www.chukde.com/api/v1/re/products`)
+  // const sliderRes = await fetch(`http://local.nextjs.com/api/v1/re/sliders`)
+  const sliderRes = await fetch(`https://www.chukde.com/api/v1/re/sliders`)
 
   const products = await res.json()
   const sliders = await sliderRes.json()
@@ -51,5 +52,6 @@ export async function getStaticProps(context) {
 
   return {
     props: { products, sliders }, // will be passed to the page component as props
+    revalidate: 10
   }
 }

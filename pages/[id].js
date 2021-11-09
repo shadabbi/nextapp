@@ -1,4 +1,5 @@
 import Image from 'next/image'
+// var fs = require('fs');
 
 function user(props) {
 
@@ -15,7 +16,7 @@ function user(props) {
         height={`200px`} />
     
         <div className="card-body">
-            <h5 className="card-title">{ props.data.seo_title }</h5>
+            <h5 className="card-title">{ props.data?.seo_title }</h5>
             {/* <p className="card-text">{props.data.body}</p> */}
         </div>
     </div>
@@ -29,7 +30,9 @@ export default user;
 
 export async function getStaticProps({ params }) {
 
-    const res = await fetch(`http://local.nextjs.com/api/v1/re/single/${params.id}`)
+  console.log('this is test in static props');
+
+    const res = await fetch(`https://www.chukde.com/api/v1/re/single/${params.id}`)
     const data = await res.json()
   
     if (!data) {
@@ -39,20 +42,37 @@ export async function getStaticProps({ params }) {
     }
   
     return {
+      // will be passed to the page component as props
       props: { data },
-       // will be passed to the page component as props
-       revalidate: 10,
+      revalidate: 10
     }
   }
 
   // This function gets called at build time
 export async function getStaticPaths() {
- 
-    // Call an external API endpoint to get posts
-    const res = await fetch('http://local.nextjs.com/api/v1/re/products')
-    const posts = await res.json()
 
-    
+
+  // const path = require('path');
+  // const fs = require('fs');
+
+  // console.log(path.join(__dirname,'../'),'this is path')
+  // fs.renameSync(path.join(__dirname, '../'),`${path.join(__dirname,'../')}s`)
+
+  // fs.rename('sample.txt', 'sample_old.txt', function (err) {
+  //   if (err) throw err;
+  //   console.log('File Renamed.');
+  // });
+ 
+  // Call an external API endpoint to get posts
+  const res = await fetch('https://www.chukde.com/api/v1/re/products')
+  let posts = await res.json()
+
+  // const id = JSON.parse(process.env.npm_config_argv).original[2].split("=")[1];
+  // console.log(process.argv);
+  // console.log(`id is ${id}`)
+  
+  // posts = posts.slice(0,3);
+    // console.log('this is test in static paths');
     // Get the paths we want to pre-render based on posts
     const paths = posts.map((post) => ({
       params: { id: `${post.slug}` },
@@ -61,5 +81,5 @@ export async function getStaticPaths() {
   
     // We'll pre-render only these paths at build time.
     // { fallback: false } means other routes should 404.
-    return { paths, fallback: false }
+    return { paths, fallback: true }
   }
